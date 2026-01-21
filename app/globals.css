@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+:root {
+  /* Base */
+  --background: #f7fbff;
+  --foreground: #0f172a;
+
+  /* Medical palette */
+  --med-surface: #ffffff;
+  --med-border: #e2e8f0;
+  --med-muted: #475569;
+
+  --med-primary: #0f766e; /* teal */
+  --med-primary-2: #14b8a6;
+  --med-accent: #2563eb; /* blue */
+  --med-accent-2: #60a5fa;
+
+  --med-success: #16a34a;
+  --med-danger: #dc2626;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #071018;
+    --foreground: #e5e7eb;
+
+    --med-surface: #0b1622;
+    --med-border: #1f2a37;
+    --med-muted: #9ca3af;
+
+    --med-primary: #2dd4bf;
+    --med-primary-2: #5eead4;
+    --med-accent: #60a5fa;
+    --med-accent-2: #93c5fd;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Utility classes for consistent medical look */
+.med-card {
+  background: var(--med-surface);
+  border: 1px solid var(--med-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.med-link-card {
+  border: 1px solid var(--med-border);
+  border-radius: 16px;
+  background: var(--med-surface);
+  transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease;
+}
+
+.med-link-card:hover {
+  transform: translateY(-1px);
+  border-color: rgba(20, 184, 166, 0.55);
+  box-shadow: 0 10px 20px rgba(15, 118, 110, 0.10);
+}
+
+.med-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.10);
+  border: 1px solid rgba(20, 184, 166, 0.30);
+  color: var(--foreground);
+}
