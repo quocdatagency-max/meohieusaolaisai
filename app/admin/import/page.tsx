@@ -13,27 +13,35 @@ type CSVRow = Record<string, unknown>;
 
 function parseCSV(text: string): Promise<CSVRow[]> {
   return new Promise((resolve, reject) => {
-    Papa.parse<CSVRow>(text, {
+    // KHÔNG dùng Papa.parse<CSVRow>(...) vì build của bạn coi parse là "untyped"
+    Papa.parse(text, {
       header: true,
       skipEmptyLines: true,
       dynamicTyping: false,
 
-      // PapaParse sẽ tự đoán delimiter (thường "," hoặc ";") nếu không set delimiter
+      // để Papa tự đoán delimiter, đừng set delimiter:""
       transformHeader: (h: string) => h.replace(/^\uFEFF/, "").trim(),
       transform: (v: unknown) => (typeof v === "string" ? v.trim() : v),
 
-      complete: (results: ParseResult<CSVRow>) => {
-        if (results.errors?.length) {
-          const first = results.errors[0];
-          reject(new Error(`CSV parse error (row ${first.row}): ${first.message}`));
+      complete: (results: any) => {
+        const errors = results?.errors ?? [];
+        if (errors.length) {
+          const first = errors[0];
+          reject(
+            new Error(
+              `CSV parse error (row ${first?.row ?? "?"}): ${first?.message ?? "Unknown error"}`
+            )
+          );
           return;
         }
-        resolve(results.data ?? []);
+        resolve((results?.data ?? []) as CSVRow[]);
       },
-      error: (err: ParseError) => reject(err),
+
+      error: (err: any) => reject(err),
     });
   });
 }
+
 
 function normalizeCorrectAnswer(input: any): string {
   // Cho phép: "c" -> "C", "A; C" -> "A,C"
